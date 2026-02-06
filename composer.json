@@ -1,24 +1,28 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "bambamboole/laravel-pdf-ua",
+    "description": "Laravel package for creating PDF/UA (Universal Accessibility) compliant PDFs with structured information",
     "keywords": [
-        ":vendor_name",
+        "bambamboole",
         "laravel",
-        ":package_slug"
+        "pdf",
+        "pdf-ua",
+        "accessibility",
+        "tcpdf"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/bambamboole/laravel-pdf-ua",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
+            "name": "bambamboole",
             "email": "author@domain.com",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.4",
+        "php": "^8.2",
         "spatie/laravel-package-tools": "^1.16",
-        "illuminate/contracts": "^11.0||^12.0"
+        "illuminate/contracts": "^11.0||^12.0",
+        "tecnickcom/tcpdf": "^6.7"
     },
     "require-dev": {
         "laravel/pint": "^1.14",
@@ -35,13 +39,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Bambamboole\\LaravelPdfUa\\": "src/",
+            "Bambamboole\\LaravelPdfUa\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "Bambamboole\\LaravelPdfUa\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +67,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Bambamboole\\LaravelPdfUa\\PdfUaServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "PdfUa": "Bambamboole\\LaravelPdfUa\\Facades\\PdfUa"
             }
         }
     },

@@ -1,69 +1,206 @@
-# :package_description
+# Laravel PDF/UA - Universal Accessibility PDF Generation
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/bambamboole/laravel-pdf-ua.svg?style=flat-square)](https://packagist.org/packages/bambamboole/laravel-pdf-ua)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/bambamboole/laravel-pdf-ua/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/bambamboole/laravel-pdf-ua/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/bambamboole/laravel-pdf-ua.svg?style=flat-square)](https://packagist.org/packages/bambamboole/laravel-pdf-ua)
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+A Laravel package for creating **PDF/UA (Universal Accessibility)** compliant PDFs with structured information using PHP and TCPDF library.
 
-## Support us
+## What is PDF/UA?
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
+PDF/UA (ISO 14289-1) is an international standard for creating accessible PDF documents that can be read by assistive technologies like screen readers. This package provides a proof of concept for generating PDF/UA compliant documents with:
 
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+- **Proper document structure** with semantic tags (headings, paragraphs, lists, tables)
+- **Document metadata** (title, author, language, subject, keywords)
+- **Logical reading order** for screen readers
+- **Tagged content** for accessibility
+- **Language specification** for proper text-to-speech
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
+composer require bambamboole/laravel-pdf-ua
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag=":package_slug-config"
+php artisan vendor:publish --tag="laravel-pdf-ua-config"
 ```
 
 This is the contents of the published config file:
 
 ```php
 return [
+    'title' => env('PDF_UA_TITLE', 'PDF/UA Document'),
+    'author' => env('PDF_UA_AUTHOR', 'Laravel PDF/UA'),
+    'subject' => env('PDF_UA_SUBJECT', 'Accessible PDF Document'),
+    'keywords' => env('PDF_UA_KEYWORDS', 'PDF, UA, Accessibility'),
+    'creator' => env('PDF_UA_CREATOR', 'Laravel PDF/UA Package'),
+    'language' => env('PDF_UA_LANGUAGE', 'en-US'),
+    'pdf_version' => '1.7',
+    'orientation' => 'P', // P=Portrait, L=Landscape
+    'unit' => 'mm',
+    'format' => 'A4',
+    'margins' => [
+        'left' => 15,
+        'top' => 15,
+        'right' => 15,
+        'bottom' => 15,
+    ],
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
 ```
 
 ## Usage
 
-```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+### Quick Start - Generate Sample PDF
+
+Generate a sample PDF/UA document using the artisan command:
+
+```bash
+php artisan pdf-ua:generate
 ```
+
+This will create a sample PDF at `storage/app/sample-pdf-ua.pdf`.
+
+You can specify a custom output path:
+
+```bash
+php artisan pdf-ua:generate /path/to/output.pdf
+```
+
+### Programmatic Usage
+
+#### Basic Usage
+
+```php
+use Bambamboole\LaravelPdfUa\PdfUaGenerator;
+
+$generator = new PdfUaGenerator([
+    'title' => 'My Accessible Document',
+    'author' => 'John Doe',
+    'subject' => 'Important Information',
+    'language' => 'en-US',
+]);
+
+$html = '<h1>Welcome</h1><p>This is an accessible PDF document.</p>';
+$pdf = $generator->generate($html, 'output.pdf');
+```
+
+#### Using Structured Content
+
+```php
+use Bambamboole\LaravelPdfUa\PdfUaGenerator;
+
+$generator = new PdfUaGenerator();
+
+$content = [
+    [
+        'type' => 'h1',
+        'content' => 'Document Title',
+    ],
+    [
+        'type' => 'h2',
+        'content' => 'Section Heading',
+    ],
+    [
+        'type' => 'p',
+        'content' => 'This is a paragraph with important information.',
+    ],
+    [
+        'type' => 'ul',
+        'items' => [
+            'First bullet point',
+            'Second bullet point',
+            'Third bullet point',
+        ],
+    ],
+    [
+        'type' => 'table',
+        'headers' => ['Name', 'Value', 'Description'],
+        'rows' => [
+            ['Item 1', '100', 'First item description'],
+            ['Item 2', '200', 'Second item description'],
+        ],
+    ],
+];
+
+$html = $generator->generateStructuredHtml($content);
+$pdf = $generator->generate($html, 'structured-document.pdf');
+```
+
+#### Using the Facade
+
+```php
+use Bambamboole\LaravelPdfUa\Facades\PdfUa;
+
+$html = '<h1>Accessible Document</h1><p>Generated with facade.</p>';
+$pdf = PdfUa::generate($html, 'document.pdf');
+```
+
+### Supported Content Types
+
+The package supports the following structured content types:
+
+- `h1`, `h2`, `h3` - Headings
+- `p` - Paragraphs
+- `ul` - Unordered lists
+- `ol` - Ordered lists
+- `table` - Data tables with headers
+
+### Configuration Options
+
+You can customize the PDF generation by passing configuration options:
+
+```php
+$generator = new PdfUaGenerator([
+    'title' => 'Document Title',
+    'author' => 'Author Name',
+    'subject' => 'Document Subject',
+    'keywords' => 'keyword1, keyword2, keyword3',
+    'creator' => 'My Application',
+    'language' => 'en-US', // Language code (en-US, de-DE, fr-FR, etc.)
+    'pdf_version' => '1.7',
+    'orientation' => 'P', // P=Portrait, L=Landscape
+    'unit' => 'mm',
+    'format' => 'A4',
+]);
+```
+
+## Features
+
+### ✅ PDF/UA Compliance
+
+- **Tagged PDF structure** for screen readers
+- **Document metadata** required by PDF/UA standard
+- **Language specification** for proper text-to-speech
+- **Semantic HTML** structure (h1-h6, p, ul, ol, table)
+- **Logical reading order**
+
+### 🎨 Structured Content
+
+- Easy-to-use array-based content definition
+- Support for headings, paragraphs, lists, and tables
+- Automatic HTML generation from structured data
+
+### ⚙️ Flexible Configuration
+
+- Customizable document metadata
+- Multiple page formats and orientations
+- Configurable margins and units
+- Environment-based configuration support
+
+## Technical Details
+
+This package uses [TCPDF](https://tcpdf.org/) for PDF generation, which provides:
+
+- PDF/UA compliance features
+- Tagged PDF support
+- Unicode support (UTF-8)
+- Multiple language support
+- Standards-compliant PDF generation
 
 ## Testing
 
@@ -71,13 +208,21 @@ echo $variable->echoPhrase('Hello, VendorName!');
 composer test
 ```
 
-## Changelog
+## Limitations & Future Improvements
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+This is a **proof of concept** demonstrating PDF/UA generation with PHP. Future enhancements could include:
+
+- [ ] Image support with alternative text
+- [ ] Form fields with proper labels
+- [ ] More complex table structures (colspan, rowspan)
+- [ ] Custom styling options
+- [ ] PDF/A support (archival standard)
+- [ ] Enhanced validation of PDF/UA compliance
+- [ ] Additional languages and right-to-left text support
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Contributions are welcome! Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security Vulnerabilities
 
@@ -85,9 +230,16 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [bambamboole](https://github.com/bambamboole)
 - [All Contributors](../../contributors)
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## Resources
+
+- [PDF/UA Standard (ISO 14289-1)](https://www.iso.org/standard/64599.html)
+- [TCPDF Library](https://tcpdf.org/)
+- [Web Content Accessibility Guidelines (WCAG)](https://www.w3.org/WAI/standards-guidelines/wcag/)
+- [PDF Association - PDF/UA](https://www.pdfa.org/resource/pdfua/)
