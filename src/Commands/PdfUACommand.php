@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Bambamboole\PdfUA\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class PdfUACommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-pdf-ua';
 
     public $description = 'My command';
 
