@@ -30,3 +30,11 @@ phpstan.neon
 testbench.yaml
 /docs
 /coverage
+
+# Generated PDFs
+*.pdf
+/storage/*.pdf
+
+# Temporary files
+/tmp
+*.tmp
