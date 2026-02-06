@@ -2,9 +2,9 @@
 
 namespace Bambamboole\PdfUA\Tests;
 
+use Bambamboole\PdfUA\PdfUAServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Bambamboole\PdfUA\PdfUAServiceProvider;
 
 class TestCase extends Orchestra
 {

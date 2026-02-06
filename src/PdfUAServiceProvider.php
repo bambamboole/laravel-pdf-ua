@@ -2,9 +2,9 @@
 
 namespace Bambamboole\PdfUA;
 
+use Bambamboole\PdfUA\Commands\PdfUACommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Bambamboole\PdfUA\Commands\PdfUACommand;
 
 class PdfUAServiceProvider extends PackageServiceProvider
 {
